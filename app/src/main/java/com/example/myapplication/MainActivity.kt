@@ -19,8 +19,8 @@ class MainActivity : ComponentActivity() {
         messageTextView = findViewById(R.id.messageTextView)
 
         startButton.setOnClickListener {
-            // رفتن به صفحه مراحل
-            startActivity(Intent(this, StagesActivity::class.java))
+            // رفتن به صفحه انتخاب پارت‌ها
+            startActivity(Intent(this, PartsActivity::class.java))
         }
     }
 }

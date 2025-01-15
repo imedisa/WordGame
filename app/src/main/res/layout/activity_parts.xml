@@ -9,30 +9,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="مراحل بازی"
+        android:text="انتخاب پارت"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="24dp" />
 
-    <!-- لیست مراحل -->
+    <!-- لیست پارت‌ها -->
     <LinearLayout
-        android:id="@+id/stagesContainer"
+        android:id="@+id/partsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="16dp" />
-
-    <!-- دکمه بازگشت به پارت‌ها -->
-    <Button
-        android:id="@+id/backToPartsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="بازگشت به پارت‌ها"
-        android:textSize="18sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="16dp" />
 
 </LinearLayout>

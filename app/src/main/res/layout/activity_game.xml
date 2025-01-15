@@ -57,34 +57,19 @@
         android:useDefaultMargins="true"
         android:layout_gravity="center_horizontal" />
 
-    <LinearLayout
+    <!-- دکمه بررسی -->
+    <Button
+        android:id="@+id/checkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:text="بررسی"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:layout_gravity="center_horizontal">
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp" />
 
-        <Button
-            android:id="@+id/checkButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="بررسی"
-            android:textSize="18sp"
-            android:layout_marginEnd="16dp"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="16dp" />
-
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="پاک کردن"
-            android:textSize="18sp"
-            android:paddingHorizontal="32dp"
-            android:paddingVertical="16dp" />
-    </LinearLayout>
-
-    <!-- دکمه بازگشت در پایین صفحه -->
+    <!-- دکمه بازگشت به مراحل -->
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
