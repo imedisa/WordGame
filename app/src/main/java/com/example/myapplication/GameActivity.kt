@@ -1,16 +1,20 @@
+
+// 3. GameActivity.kt
 package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Button
 import android.widget.GridLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.graphics.Color
 
 class GameActivity : AppCompatActivity() {
@@ -20,11 +24,18 @@ class GameActivity : AppCompatActivity() {
     private lateinit var lettersGrid: GridLayout
     private lateinit var checkButton: Button
     private lateinit var clearButton: Button
+    private lateinit var timerTextView: TextView
+    private lateinit var backButton: Button
+    private lateinit var livesLayout: LinearLayout
+    private lateinit var database: DatabaseReference
+    private lateinit var countDownTimer: CountDownTimer
 
     private var currentStage: Int = 1
     private var currentWord: String = ""
     private var selectedLetters: StringBuilder = StringBuilder()
-    private lateinit var database: DatabaseReference
+    private var timeLeftInMillis: Long = 60000
+    private var lives = 5
+    private val heartDrawable = R.drawable.ic_heart_red
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +44,8 @@ class GameActivity : AppCompatActivity() {
         initializeViews()
         setupGame()
         setupButtons()
+        startTimer()
+        setupLives()
     }
 
     private fun initializeViews() {
@@ -41,8 +54,10 @@ class GameActivity : AppCompatActivity() {
         lettersGrid = findViewById(R.id.lettersGrid)
         checkButton = findViewById(R.id.checkButton)
         clearButton = findViewById(R.id.clearButton)
+        timerTextView = findViewById(R.id.timerTextView)
+        backButton = findViewById(R.id.backButton)
+        livesLayout = findViewById(R.id.livesLayout)
 
-        // تنظیم GridLayout
         lettersGrid.columnCount = 4
         lettersGrid.rowCount = 2
         lettersGrid.useDefaultMargins = true
@@ -58,6 +73,7 @@ class GameActivity : AppCompatActivity() {
     private fun setupButtons() {
         checkButton.setOnClickListener { checkAndCompleteStage() }
         clearButton.setOnClickListener { clearLastLetter() }
+        backButton.setOnClickListener { goBackToStages() }
     }
 
     private fun setupStage(stage: Int) {
@@ -76,8 +92,6 @@ class GameActivity : AppCompatActivity() {
         }
 
         wordTextView.text = "_".repeat(currentWord.length)
-
-        // پاک کردن GridLayout قبل از اضافه کردن دکمه‌های جدید
         lettersGrid.removeAllViews()
 
         val shuffledLetters = currentWord.toList().shuffled()
@@ -87,7 +101,6 @@ class GameActivity : AppCompatActivity() {
                 text = letter.toString()
                 textSize = 18f
 
-                // تنظیم پارامترهای لایوت برای دکمه
                 val params = GridLayout.LayoutParams().apply {
                     width = ViewGroup.LayoutParams.WRAP_CONTENT
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -95,7 +108,6 @@ class GameActivity : AppCompatActivity() {
                 }
                 layoutParams = params
 
-                // تنظیم استایل دکمه
                 setBackgroundColor(Color.parseColor("#2196F3"))
                 setTextColor(Color.WHITE)
                 setPadding(16, 16, 16, 16)
@@ -104,6 +116,28 @@ class GameActivity : AppCompatActivity() {
             }
             lettersGrid.addView(button)
         }
+    }
+
+    private fun setupLives() {
+        livesLayout.removeAllViews()
+
+        for (i in 1..lives) {
+            val heartImageView = ImageView(this).apply {
+                setImageResource(heartDrawable)
+                layoutParams = LinearLayout.LayoutParams(
+                    dpToPx(30),
+                    dpToPx(30)
+                ).apply {
+                    setMargins(dpToPx(4), 0, dpToPx(4), 0)
+                }
+            }
+            livesLayout.addView(heartImageView)
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val scale = resources.displayMetrics.density
+        return (dp * scale + 0.5f).toInt()
     }
 
     private fun addLetter(letter: String) {
@@ -141,12 +175,61 @@ class GameActivity : AppCompatActivity() {
             }
             finish()
         } else {
+            loseLife()
             Toast.makeText(this, "کلمه نادرست است!", Toast.LENGTH_SHORT).show()
+            selectedLetters.clear()
+            wordTextView.text = "_".repeat(currentWord.length)
+        }
+    }
+
+    private fun loseLife() {
+        if (lives > 0) {
+            lives--
+            setupLives()  // بازسازی نمایش قلب‌ها
+            if (lives == 0) {
+                Toast.makeText(this, "جان‌های شما تمام شد!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 
     private fun saveProgress(stage: Int) {
         val userId = "user1"
         database.child("users").child(userId).child("unlockedStages").setValue(stage)
+    }
+
+    private fun startTimer() {
+        countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeftInMillis = millisUntilFinished
+                updateTimer()
+            }
+
+            override fun onFinish() {
+                timeLeftInMillis = 0
+                updateTimer()
+                Toast.makeText(this@GameActivity, "زمان شما به پایان رسید!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }.start()
+    }
+
+    private fun updateTimer() {
+        val minutes = (timeLeftInMillis / 1000) / 60
+        val seconds = (timeLeftInMillis / 1000) % 60
+        val timeFormatted = String.format("%02d:%02d", minutes, seconds)
+        timerTextView.text = timeFormatted
+    }
+
+    private fun goBackToStages() {
+        startActivity(Intent(this, StagesActivity::class.java))
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::countDownTimer.isInitialized) {
+            countDownTimer.cancel()
+        }
     }
 }
