@@ -3,42 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background_gradient">
 
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/score_default"
-        android:textSize="18sp" />
+        android:text="امتیاز: ۰"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/stageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="پارت ۱ - مرحله ۱"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp" />
 
     <TextView
         android:id="@+id/wordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hidden_word"
-        android:textSize="24sp"
-        android:layout_marginTop="16dp"/>
+        android:text="__ __ __ __"
+        android:textSize="32sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp" />
 
-    <Button
-        android:id="@+id/buyHintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buy_hint_default"
-        android:layout_marginTop="16dp"/>
-
-    <!-- تایمر -->
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:text="01:00"
         android:textSize="24sp"
+        android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        android:text="@string/timer_text" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp" />
 
-    <!-- نمایش جان‌ها -->
     <LinearLayout
         android:id="@+id/livesLayout"
         android:layout_width="wrap_content"
@@ -47,60 +57,52 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:id="@+id/stageTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="24dp"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
-        android:id="@+id/stageWordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="32dp"
-        android:letterSpacing="0.5"
-        android:layout_gravity="center_horizontal" />
-
     <GridLayout
         android:id="@+id/lettersGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:alignmentMode="alignMargins"
         android:columnCount="4"
-        android:orientation="horizontal"
+        android:rowCount="2"
+        android:alignmentMode="alignMargins"
+        android:columnOrderPreserved="false"
         android:useDefaultMargins="true"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp" />
 
-    <!-- دکمه بررسی -->
     <Button
         android:id="@+id/checkButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/check_button"
+        android:text="بررسی"
         android:textSize="18sp"
-        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@color/white"
         android:layout_marginTop="16dp"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="16dp" />
+        android:elevation="8dp"
+        android:padding="16dp" />
 
-    <!-- دکمه بازگشت به مراحل -->
+    <Button
+        android:id="@+id/buyHintButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="خرید سرنخ (۱۰۰ امتیاز)"
+        android:textSize="18sp"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:elevation="8dp"
+        android:padding="16dp" />
+
     <Button
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/back_button"
+        android:text="بازگشت به مراحل"
         android:textSize="18sp"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="16dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp" />
+        android:elevation="8dp"
+        android:backgroundTint="@color/blue"
+        android:textColor="@color/white"
+        android:layout_marginTop="24dp"
+        android:padding="16dp" />
 
 </LinearLayout>
