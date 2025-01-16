@@ -4,11 +4,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Looper
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.ScaleAnimation
-import android.view.animation.TranslateAnimation
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.Locale
+import android.content.SharedPreferences
 
 class GameActivity : AppCompatActivity() {
 
@@ -29,9 +30,11 @@ class GameActivity : AppCompatActivity() {
     private lateinit var timerTextView: TextView
     private lateinit var backButton: Button
     private lateinit var livesLayout: LinearLayout
+    private lateinit var scoreTextView: TextView // TextView برای نمایش امتیاز
     private lateinit var database: DatabaseReference
     private lateinit var countDownTimer: CountDownTimer
-
+    private lateinit var sharedPreferences: SharedPreferences
+    private var score = 0 // متغیر برای ذخیره امتیاز کاربر
     private var currentPart: Int = 1
     private var currentStage: Int = 1
     private var currentWord: String = ""
@@ -43,6 +46,12 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        // مقداردهی اولیه SharedPreferences
+        sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
+
+        // بازیابی امتیاز کاربر از SharedPreferences
+        score = sharedPreferences.getInt("user_score", 0)
 
         initializeViews()
         setupGame()
@@ -59,6 +68,7 @@ class GameActivity : AppCompatActivity() {
         timerTextView = findViewById(R.id.timerTextView)
         backButton = findViewById(R.id.backButton)
         livesLayout = findViewById(R.id.livesLayout)
+        scoreTextView = findViewById(R.id.scoreTextView) // اتصال TextView امتیاز
 
         lettersGrid.columnCount = 4
         lettersGrid.rowCount = 2
@@ -68,9 +78,20 @@ class GameActivity : AppCompatActivity() {
     private fun setupGame() {
         currentPart = intent.getIntExtra("part", 1)
         currentStage = intent.getIntExtra("stage", 1)
-        stageTitle.text = getString(R.string.stage_title, currentPart, currentStage) // رفع خطای format string
+        stageTitle.text = getString(R.string.stage_title, currentPart, currentStage)
         database = FirebaseDatabase.getInstance().reference
         setupStage(currentPart, currentStage)
+        updateScore() // به‌روزرسانی امتیاز در شروع بازی
+    }
+
+    private fun updateScore() {
+        scoreTextView.text = "امتیاز: $score"
+    }
+
+    private fun calculateScore() {
+        // محاسبه امتیاز بر اساس تعداد جان‌های باقی‌مانده
+        score += lives * 10 // هر جان باقی‌مانده ۱۰ امتیاز دارد
+        updateScore()
     }
 
     private fun setupButtons() {
@@ -185,8 +206,9 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkAndCompleteStage() {
         if (selectedLetters.toString() == currentWord) {
-            showCorrectAnimation() // نمایش انیمیشن پاسخ درست
-            resetTextViewStyle() // بازنشانی استایل TextView
+            calculateScore() // محاسبه امتیاز
+            showCorrectAnimation()
+            resetTextViewStyle()
             Toast.makeText(this, "کلمه درست است!", Toast.LENGTH_SHORT).show()
             saveProgress(currentPart, currentStage)
 
@@ -216,38 +238,30 @@ class GameActivity : AppCompatActivity() {
             wordTextView.text = "_".repeat(currentWord.length)
         }
     }
+
     private fun showCorrectAnimation() {
-        // انیمیشن بزرگ‌شدن متن
-        val scaleAnimation = android.view.animation.ScaleAnimation(
-            1f, 1.2f, // مقیاس X از ۱ به ۱.۲
-            1f, 1.2f, // مقیاس Y از ۱ به ۱.۲
-            Animation.RELATIVE_TO_SELF, 0.5f, // نقطه محور X (وسط)
-            Animation.RELATIVE_TO_SELF, 0.5f  // نقطه محور Y (وسط)
-        ).apply {
-            duration = 300 // مدت زمان انیمیشن (میلی‌ثانیه)
-            repeatCount = 1 // تعداد تکرار
-            repeatMode = Animation.REVERSE // بازگشت به حالت اولیه
+        // تغییر رنگ متن به سبز
+        wordTextView.setTextColor(Color.parseColor("#4CAF50")) // سبز
 
-            // اضافه کردن Listener برای تغییر رنگ متن پس از اتمام انیمیشن
-            setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) {
-                    // قبل از شروع انیمیشن کاری انجام ندهید
-                }
+        // ایجاد تأخیر برای شروع انیمیشن بزرگ‌شدن
+        android.os.Handler(Looper.getMainLooper()).postDelayed({
+            // انیمیشن بزرگ‌شدن متن
+            val scaleAnimation = ScaleAnimation(
+                1f, 1.2f, // مقیاس X از ۱ به ۱.۲
+                1f, 1.2f, // مقیاس Y از ۱ به ۱.۲
+                Animation.RELATIVE_TO_SELF, 0.5f, // نقطه محور X (وسط)
+                Animation.RELATIVE_TO_SELF, 0.5f  // نقطه محور Y (وسط)
+            ).apply {
+                duration = 300 // مدت زمان انیمیشن (میلی‌ثانیه)
+                repeatCount = 1 // تعداد تکرار
+                repeatMode = Animation.REVERSE // بازگشت به حالت اولیه
+            }
 
-                override fun onAnimationEnd(animation: Animation?) {
-                    // پس از اتمام انیمیشن، رنگ متن را به سبز تغییر دهید
-                    wordTextView.setTextColor(Color.parseColor("#4CAF50")) // سبز
-                }
-
-                override fun onAnimationRepeat(animation: Animation?) {
-                    // در صورت تکرار انیمیشن کاری انجام ندهید
-                }
-            })
-        }
-
-        // اعمال انیمیشن به TextView
-        wordTextView.startAnimation(scaleAnimation)
+            // اعمال انیمیشن به TextView
+            wordTextView.startAnimation(scaleAnimation)
+        }, 100) // تأخیر ۱۰۰ میلی‌ثانیه قبل از شروع انیمیشن
     }
+
     private fun showIncorrectAnimation() {
         val animation = AnimationUtils.loadAnimation(this, R.anim.incorrect_animation)
         wordTextView.startAnimation(animation)
@@ -274,6 +288,10 @@ class GameActivity : AppCompatActivity() {
     private fun saveProgress(part: Int, stage: Int) {
         val userId = "user1"
         database.child("users").child(userId).child("unlockedStages").setValue("$part-$stage")
+        database.child("users").child(userId).child("score").setValue(score) // ذخیره امتیاز
+
+        // ذخیره امتیاز در SharedPreferences
+        sharedPreferences.edit().putInt("user_score", score).apply()
     }
 
     private fun startTimer() {

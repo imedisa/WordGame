@@ -2,4 +2,7 @@
     <string name="app_name">My Application</string>
     <string name="check_button_text">چک کردن</string>
     <string name="clear_button_text">پاک کردن</string>
-    <string name="stage_title">پارت %d، مرحله %d</string></resources>
+    <string name="stage_title">پارت %d، مرحله %d</string>
+    <string name="score_text">امتیاز: %d</string>
+
+</resources>

@@ -34,5 +34,13 @@
         android:layout_marginTop="24dp"
         android:paddingHorizontal="32dp"
         android:paddingVertical="16dp" />
-
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="امتیاز: 0"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
 </LinearLayout>
