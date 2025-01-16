@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1064967795799",
-    "project_id": "wordgame-cc61f",
-    "storage_bucket": "wordgame-cc61f.firebasestorage.app"
+    "project_number": "354203688039",
+    "project_id": "wordgamebymedisa",
+    "storage_bucket": "wordgamebymedisa.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1064967795799:android:e73459d5c65930dd07df12",
+        "mobilesdk_app_id": "1:354203688039:android:57f451c78e7b69e5ed48c2",
         "android_client_info": {
-          "package_name": "com.example.myapplication"
+          "package_name": "com.example.wordgamebymedisa"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBv-8kzh7KAnrWaugbtqIVxdRMVtz9iqQo"
+          "current_key": "AIzaSyApMRph6y-S_jz7x48y1BLA3tIVDtBPm1w"
         }
       ],
       "services": {
