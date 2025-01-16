@@ -5,6 +5,28 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score_default"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/wordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hidden_word"
+        android:textSize="24sp"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buyHintButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buy_hint_default"
+        android:layout_marginTop="16dp"/>
+
     <!-- تایمر -->
     <TextView
         android:id="@+id/timerTextView"
@@ -14,7 +36,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
-        android:text="01:00" />
+        android:text="@string/timer_text" />
 
     <!-- نمایش جان‌ها -->
     <LinearLayout
@@ -36,7 +58,7 @@
         android:layout_gravity="center_horizontal" />
 
     <TextView
-        android:id="@+id/wordTextView"
+        android:id="@+id/stageWordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="32sp"
@@ -62,7 +84,7 @@
         android:id="@+id/checkButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="بررسی"
+        android:text="@string/check_button"
         android:textSize="18sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
@@ -74,19 +96,11 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="بازگشت به مراحل"
+        android:text="@string/back_button"
         android:textSize="18sp"
         android:paddingHorizontal="32dp"
         android:paddingVertical="16dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp" />
-    <TextView
-        android:id="@+id/scoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="امتیاز: 0"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
+
 </LinearLayout>

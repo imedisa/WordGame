@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -19,10 +20,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.util.Locale
-import android.content.SharedPreferences
 
 class GameActivity : AppCompatActivity() {
-
+    private lateinit var wordToGuess: String
+    private lateinit var revealedLetters: BooleanArray
     private lateinit var stageTitle: TextView
     private lateinit var wordTextView: TextView
     private lateinit var lettersGrid: GridLayout
@@ -30,11 +31,12 @@ class GameActivity : AppCompatActivity() {
     private lateinit var timerTextView: TextView
     private lateinit var backButton: Button
     private lateinit var livesLayout: LinearLayout
-    private lateinit var scoreTextView: TextView // TextView برای نمایش امتیاز
+    private lateinit var scoreTextView: TextView
+    private lateinit var buyHintButton: Button
     private lateinit var database: DatabaseReference
     private lateinit var countDownTimer: CountDownTimer
     private lateinit var sharedPreferences: SharedPreferences
-    private var score = 0 // متغیر برای ذخیره امتیاز کاربر
+    private var score = 0
     private var currentPart: Int = 1
     private var currentStage: Int = 1
     private var currentWord: String = ""
@@ -42,15 +44,13 @@ class GameActivity : AppCompatActivity() {
     private var timeLeftInMillis: Long = 60000
     private var lives = 5
     private val heartDrawable = R.drawable.ic_heart_red
+    private val hintCost = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // مقداردهی اولیه SharedPreferences
         sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
-
-        // بازیابی امتیاز کاربر از SharedPreferences
         score = sharedPreferences.getInt("user_score", 0)
 
         initializeViews()
@@ -68,8 +68,8 @@ class GameActivity : AppCompatActivity() {
         timerTextView = findViewById(R.id.timerTextView)
         backButton = findViewById(R.id.backButton)
         livesLayout = findViewById(R.id.livesLayout)
-        scoreTextView = findViewById(R.id.scoreTextView) // اتصال TextView امتیاز
-
+        scoreTextView = findViewById(R.id.scoreTextView)
+        buyHintButton = findViewById(R.id.buyHintButton)
         lettersGrid.columnCount = 4
         lettersGrid.rowCount = 2
         lettersGrid.useDefaultMargins = true
@@ -81,7 +81,7 @@ class GameActivity : AppCompatActivity() {
         stageTitle.text = getString(R.string.stage_title, currentPart, currentStage)
         database = FirebaseDatabase.getInstance().reference
         setupStage(currentPart, currentStage)
-        updateScore() // به‌روزرسانی امتیاز در شروع بازی
+        updateScore()
     }
 
     private fun updateScore() {
@@ -89,18 +89,59 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun calculateScore() {
-        // محاسبه امتیاز بر اساس تعداد جان‌های باقی‌مانده
-        score += lives * 10 // هر جان باقی‌مانده ۱۰ امتیاز دارد
+        score += lives * 10
         updateScore()
     }
 
     private fun setupButtons() {
         checkButton.setOnClickListener { checkAndCompleteStage() }
         backButton.setOnClickListener { goBackToStages() }
+        buyHintButton.setOnClickListener { buyHint() }
+    }
+
+    private fun buyHint() {
+        if (score >= hintCost) {
+            score -= hintCost
+            sharedPreferences.edit().putInt("user_score", score).apply()
+            updateScore()
+            applyHint()
+            Toast.makeText(this, "سرنخ اعمال شد! امتیاز شما: $score", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "امتیاز کافی ندارید!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun applyHint() {
+        val hiddenIndices = revealedLetters.withIndex()
+            .filter { !it.value }
+            .map { it.index }
+
+        if (hiddenIndices.isNotEmpty()) {
+            val randomIndex = hiddenIndices.random()
+            revealedLetters[randomIndex] = true
+            updateWordDisplay()
+        } else {
+            Toast.makeText(this, "همه حروف باز شده‌اند!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateWordDisplay() {
+        val displayedWord = StringBuilder()
+        for (i in wordToGuess.indices) {
+            if (revealedLetters[i]) {
+                displayedWord.append(wordToGuess[i])
+            } else {
+                displayedWord.append("_")
+            }
+            displayedWord.append(" ")
+        }
+        wordTextView.text = displayedWord.toString().trim()
     }
 
     private fun setupStage(part: Int, stage: Int) {
         currentWord = getWordForStage(part, stage)
+        wordToGuess = currentWord
+        revealedLetters = BooleanArray(wordToGuess.length) { false }
         wordTextView.text = "_".repeat(currentWord.length)
         lettersGrid.removeAllViews()
 
@@ -206,7 +247,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkAndCompleteStage() {
         if (selectedLetters.toString() == currentWord) {
-            calculateScore() // محاسبه امتیاز
+            calculateScore()
             showCorrectAnimation()
             resetTextViewStyle()
             Toast.makeText(this, "کلمه درست است!", Toast.LENGTH_SHORT).show()
@@ -240,33 +281,29 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun showCorrectAnimation() {
-        // تغییر رنگ متن به سبز
-        wordTextView.setTextColor(Color.parseColor("#4CAF50")) // سبز
+        wordTextView.setTextColor(Color.parseColor("#4CAF50"))
 
-        // ایجاد تأخیر برای شروع انیمیشن بزرگ‌شدن
         android.os.Handler(Looper.getMainLooper()).postDelayed({
-            // انیمیشن بزرگ‌شدن متن
             val scaleAnimation = ScaleAnimation(
-                1f, 1.2f, // مقیاس X از ۱ به ۱.۲
-                1f, 1.2f, // مقیاس Y از ۱ به ۱.۲
-                Animation.RELATIVE_TO_SELF, 0.5f, // نقطه محور X (وسط)
-                Animation.RELATIVE_TO_SELF, 0.5f  // نقطه محور Y (وسط)
+                1f, 1.2f,
+                1f, 1.2f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
             ).apply {
-                duration = 300 // مدت زمان انیمیشن (میلی‌ثانیه)
-                repeatCount = 1 // تعداد تکرار
-                repeatMode = Animation.REVERSE // بازگشت به حالت اولیه
+                duration = 300
+                repeatCount = 1
+                repeatMode = Animation.REVERSE
             }
 
-            // اعمال انیمیشن به TextView
             wordTextView.startAnimation(scaleAnimation)
-        }, 100) // تأخیر ۱۰۰ میلی‌ثانیه قبل از شروع انیمیشن
+        }, 100)
     }
 
     private fun showIncorrectAnimation() {
         val animation = AnimationUtils.loadAnimation(this, R.anim.incorrect_animation)
         wordTextView.startAnimation(animation)
-        wordTextView.setBackgroundColor(Color.parseColor("#FF5252")) // قرمز
-        wordTextView.setTextColor(Color.WHITE) // متن سفید
+        wordTextView.setBackgroundColor(Color.parseColor("#FF5252"))
+        wordTextView.setTextColor(Color.WHITE)
     }
 
     private fun resetTextViewStyle() {
@@ -288,9 +325,7 @@ class GameActivity : AppCompatActivity() {
     private fun saveProgress(part: Int, stage: Int) {
         val userId = "user1"
         database.child("users").child(userId).child("unlockedStages").setValue("$part-$stage")
-        database.child("users").child(userId).child("score").setValue(score) // ذخیره امتیاز
-
-        // ذخیره امتیاز در SharedPreferences
+        database.child("users").child(userId).child("score").setValue(score)
         sharedPreferences.edit().putInt("user_score", score).apply()
     }
 

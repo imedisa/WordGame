@@ -23,13 +23,12 @@ class StagesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_stages)
 
         sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
-        val score = sharedPreferences.getInt("user_score", 0)
-
         scoreTextView = findViewById(R.id.scoreTextView)
-        scoreTextView.text = getString(R.string.score_text, score)
-
         stagesContainer = findViewById(R.id.stagesContainer)
         backToPartsButton = findViewById(R.id.backToPartsButton)
+
+        // نمایش امتیاز کاربر
+        updateScoreDisplay()
 
         currentPart = intent.getIntExtra("part", 1)
 
@@ -61,5 +60,10 @@ class StagesActivity : AppCompatActivity() {
             startActivity(Intent(this, PartsActivity::class.java))
             finish()
         }
+    }
+
+    private fun updateScoreDisplay() {
+        val score = sharedPreferences.getInt("user_score", 0)
+        scoreTextView.text = getString(R.string.score_text, score)
     }
 }

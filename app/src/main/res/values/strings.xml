@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="check_button_text">چک کردن</string>
-    <string name="clear_button_text">پاک کردن</string>
+    <string name="check_button">بررسی</string>
+    <string name="clear_button">پاک کردن</string>
     <string name="stage_title">پارت %d، مرحله %d</string>
     <string name="score_text">امتیاز: %d</string>
-
+    <string name="buy_hint">خرید سرنخ (%d امتیاز)</string>
+    <string name="hint_applied">سرنخ اعمال شد! امتیاز شما: %d</string>
+    <string name="not_enough_points">امتیاز کافی ندارید!</string>
+    <string name="hidden_word">_ _ _ _ _ _ _</string>
+    <string name="timer_text">01:00</string>
+    <string name="back_button">بازگشت به مراحل</string>
+    <string name="score_default">امتیاز: 0</string>
+    <string name="buy_hint_default">خرید سرنخ (۱۰۰ امتیاز)</string>
+    <string name="stage_word_text">کلمه مرحله</string>
 </resources>
