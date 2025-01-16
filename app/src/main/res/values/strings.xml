@@ -15,4 +15,6 @@
     <string name="stage_word_text">کلمه مرحله</string>
     <string name="welcome_message">به بازی کلمه‌سازی خوش آمدید!</string>
     <string name="start_game">شروع بازی</string>
+    <string name="stage_locked">مرحله %d قفل است! ابتدا مرحله قبلی را کامل کنید.</string>
+
 </resources>

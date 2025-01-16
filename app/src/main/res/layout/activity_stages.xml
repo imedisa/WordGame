@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background_gradient">
 
     <!-- عنوان صفحه -->
     <TextView
@@ -16,24 +17,33 @@
         android:layout_marginBottom="24dp" />
 
     <!-- لیست مراحل -->
-    <LinearLayout
+    <GridLayout
         android:id="@+id/stagesContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp" />
+        android:columnCount="3"
+        android:rowCount="4"
+        android:alignmentMode="alignMargins"
+        android:columnOrderPreserved="false"
+        android:useDefaultMargins="true"
+        android:gravity="center"
+        android:layout_gravity="center" /> <!-- مرکز‌چین کردن GridLayout در صفحه --> <!-- مرکز‌چین کردن GridLayout در صفحه -->
 
     <!-- دکمه بازگشت به پارت‌ها -->
     <Button
         android:id="@+id/backToPartsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="بازگشت به پارت‌ها"
+        android:text="بازگشت به بخش‌ها"
         android:textSize="18sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
         android:paddingHorizontal="32dp"
-        android:paddingVertical="16dp" />
+        android:paddingVertical="16dp"
+        android:elevation="8dp"
+        android:backgroundTint="@color/orange"
+        android:textColor="@color/black" /> <!-- تغییر رنگ متن به سفید -->
+    <!-- نمایش امتیاز -->
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
@@ -43,4 +53,5 @@
         android:textColor="@android:color/black"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp" />
+
 </LinearLayout>

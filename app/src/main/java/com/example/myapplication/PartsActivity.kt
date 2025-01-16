@@ -1,11 +1,14 @@
 package com.example.myapplication
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 
 class PartsActivity : AppCompatActivity() {
 
@@ -20,9 +23,31 @@ class PartsActivity : AppCompatActivity() {
 
         // ایجاد دکمه‌های پارت‌ها
         for (part in 1..totalParts) {
+            // ایجاد CardView برای هر پارت
+            val cardView = CardView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 16, 16, 16) // فاصله بین کارت‌ها
+                }
+                radius = 8f // گوشه‌های گرد
+                cardElevation = 4f // سایه
+                setCardBackgroundColor(ContextCompat.getColor(this@PartsActivity, android.R.color.white)) // رنگ پس‌زمینه
+            }
+
+            // ایجاد دکمه داخل CardView
             val button = Button(this).apply {
-                text = "پارت $part"
+                text = "بخش $part"
                 textSize = 18f
+                setBackgroundResource(R.drawable.button_background) // پس‌زمینه دکمه
+                setTextColor(Color.WHITE) // رنگ متن سفید
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 16, 16, 16) // فاصله داخلی دکمه
+                }
                 setOnClickListener {
                     // رفتن به صفحه مراحل مربوط به این پارت
                     startActivity(Intent(this@PartsActivity, StagesActivity::class.java).apply {
@@ -30,7 +55,12 @@ class PartsActivity : AppCompatActivity() {
                     })
                 }
             }
-            partsContainer.addView(button)
+
+            // اضافه کردن دکمه به CardView
+            cardView.addView(button)
+
+            // اضافه کردن CardView به لیست پارت‌ها
+            partsContainer.addView(cardView)
         }
     }
 }

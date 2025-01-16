@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
     android:background="@drawable/background_gradient">
 
-    <!-- متن خوش‌آمدگویی -->
-    <TextView
-        android:id="@+id/welcomeTextView"
-        android:layout_width="wrap_content"
+    <!-- قاب برای متن توضیحات -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/descriptionCard"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_message"
-        android:textSize="24sp"
-        android:textColor="@color/black"
+        android:layout_marginBottom="32dp"
         android:layout_above="@id/startButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp" />
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- متن توضیحات بازی -->
+            <TextView
+                android:id="@+id/descriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="به بازی کلمه‌سازی خوش آمدید!\n\nدر این بازی، شما باید با استفاده از حروف به‌هم‌ریخته، کلمات درست را بسازید. هر مرحله سخت‌تر از مرحله قبل است و شما باید با دقت و سرعت عمل کنید تا مراحل را پشت سر بگذارید.\n\nموفق باشید!"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:lineSpacingExtra="4dp"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- دکمه شروع بازی -->
     <Button
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start_game"
+        android:text="شروع بازی"
         android:textSize="18sp"
         android:layout_centerInParent="true"
         android:background="@drawable/button_background"

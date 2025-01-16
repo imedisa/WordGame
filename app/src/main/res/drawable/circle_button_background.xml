@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/purple_500" /> <!-- رنگ پس‌زمینه دکمه -->
+    <corners android:radius="100dp" /> <!-- گرد کردن گوشه‌ها برای ایجاد دایره -->
+    <size android:width="200dp" android:height="200dp" /> <!-- اندازه دکمه -->
+</shape>
