@@ -13,4 +13,6 @@
     <string name="score_default">امتیاز: 0</string>
     <string name="buy_hint_default">خرید سرنخ (۱۰۰ امتیاز)</string>
     <string name="stage_word_text">کلمه مرحله</string>
+    <string name="welcome_message">به بازی کلمه‌سازی خوش آمدید!</string>
+    <string name="start_game">شروع بازی</string>
 </resources>

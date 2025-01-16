@@ -15,9 +15,9 @@
         <activity
             android:name=".PartsActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity2PartsActivity"
-            android:exported="false" /> <!-- MainActivity (صفحه اصلی) -->
+<!--        <activity-->
+<!--            android:name=".MainActivity2PartsActivity"-->
+<!--            android:exported="false" /> &lt;!&ndash; MainActivity (صفحه اصلی) &ndash;&gt;-->
         <activity
             android:name=".MainActivity"
             android:exported="true"

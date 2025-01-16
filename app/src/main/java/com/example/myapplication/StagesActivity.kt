@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+private lateinit var sharedPreferences: SharedPreferences
 
 class StagesActivity : AppCompatActivity() {
 
@@ -17,11 +18,14 @@ class StagesActivity : AppCompatActivity() {
     private val totalStages = 10
     private var currentPart: Int = 1
     private lateinit var sharedPreferences: SharedPreferences
+    private val unlockedStages = mutableSetOf<Pair<Int, Int>>() // (پارت, مرحله)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stages)
 
+        sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
+        StageManager.setSharedPreferences(sharedPreferences) // انتقال SharedPreferences به StageManager
         sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
         scoreTextView = findViewById(R.id.scoreTextView)
         stagesContainer = findViewById(R.id.stagesContainer)
@@ -66,4 +70,5 @@ class StagesActivity : AppCompatActivity() {
         val score = sharedPreferences.getInt("user_score", 0)
         scoreTextView.text = getString(R.string.score_text, score)
     }
+
 }
