@@ -56,8 +56,8 @@ class GameActivity : AppCompatActivity() {
         initializeViews()
         setupGame()
         setupButtons()
-        startTimer()
         setupLives()
+        startTimer()
     }
 
     private fun initializeViews() {
@@ -142,7 +142,8 @@ class GameActivity : AppCompatActivity() {
         currentWord = getWordForStage(part, stage)
         wordToGuess = currentWord
         revealedLetters = BooleanArray(wordToGuess.length) { false }
-        wordTextView.text = "_".repeat(currentWord.length)
+        selectedLetters.clear()
+        updateSelectedLettersDisplay()
         lettersGrid.removeAllViews()
 
         val shuffledLetters = currentWord.toList().shuffled()
@@ -171,7 +172,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun getWordForStage(part: Int, stage: Int): String {
         return when (part) {
-            1 -> when (stage) { // پارت ۱: طبیعت و حیوانات
+            1 -> when (stage) {
                 1 -> "درخت"
                 2 -> "اسمان"
                 3 -> "آسمان"
@@ -184,7 +185,7 @@ class GameActivity : AppCompatActivity() {
                 10 -> "جنگل"
                 else -> "کلمه پیش‌فرض"
             }
-            2 -> when (stage) { // پارت ۲: فناوری و کامپیوتر
+            2 -> when (stage) {
                 1 -> "موبایل"
                 2 -> "روزنامه"
                 3 -> "برنامه"
@@ -197,7 +198,7 @@ class GameActivity : AppCompatActivity() {
                 10 -> "ربات"
                 else -> "کلمه پیش‌فرض"
             }
-            3 -> when (stage) { // پارت ۳: غذاها و نوشیدنی‌ها
+            3 -> when (stage) {
                 1 -> "پیتزا"
                 2 -> "همبرگر"
                 3 -> "سالاد"
@@ -213,6 +214,7 @@ class GameActivity : AppCompatActivity() {
             else -> "کلمه پیش‌فرض"
         }
     }
+
     private fun setupLives() {
         livesLayout.removeAllViews()
 
@@ -238,14 +240,28 @@ class GameActivity : AppCompatActivity() {
     private fun addLetter(letter: String) {
         if (selectedLetters.length < currentWord.length) {
             selectedLetters.append(letter)
-            wordTextView.text = selectedLetters.toString()
+            updateSelectedLettersDisplay()
         } else {
             Toast.makeText(this, "تعداد حروف به حداکثر رسیده است", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun updateSelectedLettersDisplay() {
+        val displayedWord = StringBuilder()
+        for (i in wordToGuess.indices) {
+            if (i < selectedLetters.length) {
+                displayedWord.append(selectedLetters[i])
+            } else {
+                displayedWord.append("_")
+            }
+            displayedWord.append(" ")
+        }
+        wordTextView.text = displayedWord.toString().trim()
+    }
+
     private fun checkAndCompleteStage() {
         if (selectedLetters.toString() == currentWord) {
+            countDownTimer.cancel()
             calculateScore()
             showCorrectAnimation()
             resetTextViewStyle()
@@ -275,7 +291,7 @@ class GameActivity : AppCompatActivity() {
             loseLife()
             Toast.makeText(this, "کلمه نادرست است!", Toast.LENGTH_SHORT).show()
             selectedLetters.clear()
-            wordTextView.text = "_".repeat(currentWord.length)
+            updateSelectedLettersDisplay()
         }
     }
 
@@ -317,6 +333,12 @@ class GameActivity : AppCompatActivity() {
             if (lives == 0) {
                 Toast.makeText(this, "جان‌های شما تمام شد!", Toast.LENGTH_SHORT).show()
                 finish()
+            } else {
+                if (::countDownTimer.isInitialized) {
+                    countDownTimer.cancel()
+                }
+                timeLeftInMillis = 60000
+                startTimer()
             }
         }
     }
@@ -336,10 +358,14 @@ class GameActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                timeLeftInMillis = 0
-                updateTimer()
-                Toast.makeText(this@GameActivity, "زمان شما به پایان رسید!", Toast.LENGTH_SHORT).show()
-                finish()
+                loseLife()
+                if (lives > 0) {
+                    timeLeftInMillis = 60000
+                    startTimer()
+                } else {
+                    Toast.makeText(this@GameActivity, "جان‌های شما تمام شد!", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
         }.start()
     }
