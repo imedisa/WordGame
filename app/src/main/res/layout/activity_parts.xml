@@ -6,7 +6,6 @@
     android:padding="16dp"
     android:background="@drawable/background_gradient">
 
-    <!-- عنوان صفحه -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +15,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="24dp" />
 
-    <!-- لیست پارت‌ها -->
     <LinearLayout
         android:id="@+id/partsContainer"
         android:layout_width="match_parent"

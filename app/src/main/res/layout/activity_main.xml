@@ -6,8 +6,7 @@
     android:padding="16dp"
     android:background="@drawable/background_gradient">
 
-    <!-- قاب برای متن توضیحات -->
-    <androidx.cardview.widget.CardView
+پ    <androidx.cardview.widget.CardView
         android:id="@+id/descriptionCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +35,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- دکمه شروع بازی -->
     <Button
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
@@ -51,7 +49,6 @@
         android:elevation="8dp"
         android:translationZ="4dp" />
 
-    <!-- متن نمایش پیام -->
     <TextView
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"

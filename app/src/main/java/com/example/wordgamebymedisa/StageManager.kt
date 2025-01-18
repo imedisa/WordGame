@@ -1,16 +1,14 @@
 import android.content.SharedPreferences
 
 object StageManager {
-    private val unlockedStages = mutableSetOf<Pair<Int, Int>>() // (پارت, مرحله)
+    private val unlockedStages = mutableSetOf<Pair<Int, Int>>()
     private lateinit var sharedPreferences: SharedPreferences
 
-    // تابع برای تنظیم SharedPreferences
     fun setSharedPreferences(prefs: SharedPreferences) {
         sharedPreferences = prefs
-        loadUnlockedStages() // بارگذاری مراحل باز شده از SharedPreferences
+        loadUnlockedStages()
     }
 
-    // تابع برای ذخیره مراحل باز شده در SharedPreferences
     private fun saveUnlockedStages() {
         val editor = sharedPreferences.edit()
         val stagesString = unlockedStages.joinToString(",") { "${it.first}-${it.second}" }
@@ -18,7 +16,6 @@ object StageManager {
         editor.apply()
     }
 
-    // تابع برای بارگذاری مراحل باز شده از SharedPreferences
     private fun loadUnlockedStages() {
         val stagesString = sharedPreferences.getString("unlocked_stages", "")
         if (!stagesString.isNullOrEmpty()) {
@@ -30,7 +27,6 @@ object StageManager {
                 }
             }
         } else {
-            // اگر داده‌ای وجود نداشت، مرحله اول پارت اول رو باز کن
             unlockedStages.add(1 to 1)
         }
     }
@@ -45,11 +41,10 @@ object StageManager {
         } else if (part < 3) {
             unlockedStages.add((part + 1) to 1)
         }
-        saveUnlockedStages() // ذخیره تغییرات در SharedPreferences
+        saveUnlockedStages()
     }
 
     init {
-        // مرحله اول پارت اول به طور پیش‌فرض باز است
         unlockedStages.add(1 to 1)
     }
 }

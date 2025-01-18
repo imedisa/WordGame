@@ -6,7 +6,6 @@
     android:padding="16dp"
     android:background="@drawable/background_gradient">
 
-    <!-- عنوان صفحه -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +15,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="24dp" />
 
-    <!-- لیست مراحل -->
     <GridLayout
         android:id="@+id/stagesContainer"
         android:layout_width="match_parent"
@@ -29,7 +27,6 @@
         android:gravity="center"
         android:layout_gravity="center" /> <!-- مرکز‌چین کردن GridLayout در صفحه --> <!-- مرکز‌چین کردن GridLayout در صفحه -->
 
-    <!-- دکمه بازگشت به پارت‌ها -->
     <Button
         android:id="@+id/backToPartsButton"
         android:layout_width="wrap_content"
@@ -43,7 +40,7 @@
         android:elevation="8dp"
         android:backgroundTint="@color/orange"
         android:textColor="@color/black" /> <!-- تغییر رنگ متن به سفید -->
-    <!-- نمایش امتیاز -->
+
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
